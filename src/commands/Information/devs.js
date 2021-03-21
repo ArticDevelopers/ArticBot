@@ -21,7 +21,7 @@ module.exports = class prefix extends Command {
     if(!args[0]) {
       const list = new ClientEmbed(author)
       .setAuthor(`Lista de developers da Artic Team`, this.client.user.displayAvatarURL({dynamic: true}))
-      .setDescription(`${!client.devs.length ? "Nenhum desenvolvedor" : client.devs.map((x) => `\`${x}\``).join(", ")}`)
+      .addField(`Lista de desenvolvedores: (${!client.devs.length ? "0" : client.devs.length})`, !client.devs.length ? "Nenhum desenvolvedor" : client.devs.map((x) => `\`${x}\``).join(", "))
       .setThumbnail(message.guild.iconURL({dynamic: true}))
       return channel.send(list)
     }
@@ -39,16 +39,23 @@ module.exports = class prefix extends Command {
       const doc = await this.client.database.user.findOne({_id: user.id})
       // Puxa a doc da db do bot //
   
+       // Cargo de dev //
+       const dev = message.guild.roles.cache.find((x) => x.name == 'Developer Oficial')
+
+       // Guild User //
+      const userguild = message.guild.members.cache.get(user.id)
 
       // Comando //
       if(doc.developer) {
           channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.username}** não é mais um developer.`)
           await doc.updateOne({$set:{developer: false}})
           await this.client.database.client.findOneAndUpdate({_id: this.client.user.id}, {$pull:{devs: username}})
+          userguild.roles.remove(dev)
       } else {
           channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.username}** agora é um developer.`)
           await doc.updateOne({$set:{developer: true}})
           await this.client.database.client.findOneAndUpdate({_id: this.client.user.id}, {$push:{devs: username}})
+          userguild.roles.add(dev)
       }
     }
   }

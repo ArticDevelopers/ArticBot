@@ -54,7 +54,42 @@ module.exports = class prefix extends Command {
         guilduser.roles.add(ger)
         await clientdb.findOneAndUpdate({_id: cid}, {$push:{'staff.gerente': user.tag}})
 
-    }   
+    } 
+} else if(role == "admin") {
+  const rol = await message.guild.roles.cache.find((x) => x.name == "Administrador")
+  if(doc.staff.admin.find((x) => x == user.tag)) {
+      channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.tag}** não está mais setado como **Administrador**`)
+      guilduser.roles.remove(rol)
+      await clientdb.findOneAndUpdate({_id: this.client.user.id}, {$pull:{'staff.admin': user.tag}})
+  } else {
+      channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.tag}** foi setado como meu **Administrador**`)
+      guilduser.roles.add(rol)
+      await clientdb.findOneAndUpdate({_id: cid}, {$push:{'staff.admin': user.tag}})
+}
+} else if(role == "moderador") {
+  const rol = await message.guild.roles.cache.find((x) => x.name == "Moderador")
+  if(doc.staff.moderador.find((x) => x == user.tag)) {
+      channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.tag}** não está mais setado como **Moderador**`)
+      guilduser.roles.remove(rol)
+      await clientdb.findOneAndUpdate({_id: this.client.user.id}, {$pull:{'staff.moderador': user.tag}})
+  } else {
+      channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.tag}** foi setado como meu **Moderador**`)
+      guilduser.roles.add(rol)
+      await clientdb.findOneAndUpdate({_id: cid}, {$push:{'staff.moderador': user.tag}})
+  }
+} else if(role == "sup") {
+  const rol = await message.guild.roles.cache.find((x) => x.name == "Suporte")
+  if(doc.staff.suporte.find((x) => x == user.tag)) {
+      channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.tag}** não está mais setado como **Suporte**`)
+      guilduser.roles.remove(rol)
+      await clientdb.findOneAndUpdate({_id: this.client.user.id}, {$pull:{'staff.suporte': user.tag}})
+  } else {
+      channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.tag}** foi setado como meu **Suporte**`)
+      guilduser.roles.add(rol)
+      await clientdb.findOneAndUpdate({_id: cid}, {$push:{'staff.suporte': user.tag}})
+  }
+} else {
+  return channel.send(`${emojis.errado} ¦ ${author}, você precisa inserir um cargo válido. Lista de cargos: **CEO, GERENTE, ADMIN, MOD, SUP**`)
 }
   }
 }
