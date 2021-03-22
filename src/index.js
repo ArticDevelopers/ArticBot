@@ -10,7 +10,10 @@ const readdir = promisify(require("fs").readdir);
 class ArticOfficial extends Client {
     constructor(options) {
         super(options)
-        this.commands = new Collection()
+        this.commands = {
+            all: new Collection(),
+            subcommands: new Collection()
+        }
         this.aliases = new Collection()
         this.categories = new Collection()
         this.database = new Collection()
@@ -21,11 +24,18 @@ class ArticOfficial extends Client {
     }
     load(commandPath, commandName) {
         const props = new (require(`${commandPath}/${commandName}`))(this);
+        if(props.sub) {
+            if(!this.commands.subcommands.get(props.reference)) {
+                this.commands.subcommands.set(props.reference, new Collection());
+            }
+            this.commands.subcommands.get(props.reference).set(props.name, props)
+        }
+        if(props.sub) return;
         props.location = commandPath;
         if(props.init) {
             props.init(this);
         }
-        this.commands.set(props.name, props)
+        this.commands.all.set(props.name, props)
         props.aliases.forEach((aliases) => {
             this.aliases.set(aliases, props.name)
         })

@@ -14,6 +14,7 @@ module.exports = class {
     moment.locale("pt-br");
 
     try {
+      if (message.channel.type == "dm") return
       const author = message.author;
       const channel = message.channel;
       const guild = message.guild;
@@ -61,9 +62,10 @@ module.exports = class {
             const args = message.content.slice(prefix.length).trim().split(/ +/g);
             const command = args.shift().toLowerCase();
             const cmd =
-              this.client.commands.get(command) ||
-              this.client.commands.get(this.client.aliases.get(command));
+              this.client.commands.all.get(command) ||
+              this.client.commands.all.get(this.client.aliases.get(command));
         
+            if(!cmd) return;
             if(cmd.ownerOnly) {
               if(!owners.some((x) => x === author.id)) return;
             }

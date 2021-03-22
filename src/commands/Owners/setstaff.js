@@ -66,7 +66,7 @@ module.exports = class prefix extends Command {
       guilduser.roles.add(rol)
       await clientdb.findOneAndUpdate({_id: cid}, {$push:{'staff.admin': user.tag}})
 }
-} else if(role == "moderador") {
+} else if(role == "mod") {
   const rol = await message.guild.roles.cache.find((x) => x.name == "Moderador")
   if(doc.staff.moderador.find((x) => x == user.tag)) {
       channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.tag}** não está mais setado como **Moderador**`)

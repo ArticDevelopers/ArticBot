@@ -8,6 +8,7 @@ let clientSchema = new Schema({
     admins: {type: Array, default: []},
     devs: {type: Array, default: []},
     lastpedido: {type: Number, default: 0},
+    lastorc: {type: Number, default: 0},
     staff:{
         owner: {type: Array, default: []},
         gerente: {type: Array, default: []},

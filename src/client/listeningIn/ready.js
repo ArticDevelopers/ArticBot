@@ -15,7 +15,7 @@ module.exports = class {
         this.client.database.pedido = Pedido;
         this.client.database.user = User;
         
-        console.log(`Estou pronto. Users: ${this.client.users.cache.size}, comandos: ${this.client.commands.size}`)
+        console.log(`Estou pronto. Users: ${this.client.users.cache.size}, comandos: ${this.client.commands.all.size}`)
 
         const status = [
          {
@@ -30,9 +30,6 @@ module.exports = class {
          {
             name: `Artic Team no topo`
          },
-         {
-             name: `ovo na puta que pariu`
-         }
         ];
         setInterval(() => {
             var randomStatus = status[Math.floor(Math.random() * status.length)];

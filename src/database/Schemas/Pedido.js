@@ -10,7 +10,9 @@ let pedidoSchema = new Schema({
         orcamento: {type: Boolean, default: true},
         cancelado: {type: Boolean, default: false},
         pago: {type: Boolean, default: false},
-        entregue: {type: Boolean, default: false}
+        entregue: {type: Boolean, default: false},
+        messageid: {type: String, default: "null"},
+        messageid2: {type: String, default: "null"},
     }
 });
 
