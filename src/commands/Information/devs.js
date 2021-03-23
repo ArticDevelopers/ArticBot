@@ -34,7 +34,7 @@ module.exports = class prefix extends Command {
       message.mentions.users.first() ||
       author
       
-      const username = user.username
+      const username = user.tag
       // Puxa a doc da db de user //
       const doc = await this.client.database.user.findOne({_id: user.id})
       // Puxa a doc da db do bot //
@@ -46,13 +46,14 @@ module.exports = class prefix extends Command {
       const userguild = message.guild.members.cache.get(user.id)
 
       // Comando //
+      if(!doc) return channel.send(`${author} Esse usuário não possui database.`)
       if(doc.developer) {
-          channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.username}** não é mais um developer.`)
+          channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.tag}** não é mais um developer.`)
           await doc.updateOne({$set:{developer: false}})
           await this.client.database.client.findOneAndUpdate({_id: this.client.user.id}, {$pull:{devs: username}})
           userguild.roles.remove(dev)
       } else {
-          channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.username}** agora é um developer.`)
+          channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.tag}** agora é um developer.`)
           await doc.updateOne({$set:{developer: true}})
           await this.client.database.client.findOneAndUpdate({_id: this.client.user.id}, {$push:{devs: username}})
           userguild.roles.add(dev)

@@ -9,8 +9,11 @@ let clientSchema = new Schema({
     devs: {type: Array, default: []},
     lastpedido: {type: Number, default: 0},
     lastorc: {type: Number, default: 0},
+    pedidosfechados: {type: Number, default: 0},
+    orcsfechados: {type: Number, default: 0},
     staff:{
         owner: {type: Array, default: []},
+        orc: {type: Array, default: []},
         gerente: {type: Array, default: []},
         admin: {type: Array, default: []},
         moderador: {type: Array, default: []},

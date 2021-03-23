@@ -16,8 +16,26 @@ module.exports = class prefix extends Command {
     this.ownerOnly = true
   }
   async run(message, args, prefix, author, channel) {
-      const tstc = this.client.channels.cache.get('822084499567411263')
-      const send = tstc.send('a').then(async(x) => channel.send(x.id))
+    const doc = await this.client.database.client.findOne({_id: this.client.user.id})
+    
+    const guild = message.guild
+    const category = guild.channels.cache.find((x) => x.id == "823645873187717131" && x.type == "category")
+    guild.channels.create(`test`, {
+      permissionOverwrites: [
+        {
+          id: guild.id,
+          deny: [
+            "CONNECT",
+            "VIEW_CHANNEL"
+          ]
+        }
+      ],
+      parent: category.id,
+      type: "VOICE"
+    }).then((x) => console.log(x.id))
+    channel.send(category.name)
+    //const tstc = this.client.channels.cache.get('822084499567411263')
+      //const send = tstc.send('a').then(async(x) => channel.send(x.id))
 
   }
 }

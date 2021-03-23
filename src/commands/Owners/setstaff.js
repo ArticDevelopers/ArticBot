@@ -19,7 +19,7 @@ module.exports = class prefix extends Command {
     const doc = await this.client.database.client.findOne({_id: this.client.user.id})
     const clientdb = this.client.database.client
     const cid = this.client.user.id
-    if(!args[0] || !args[1]) return channel.send(`${emojis.errado} ¦ ${author}, você precisa mencionar quem você deseja adicionar na lista de Staff. (Cargos: **CEO, GERENTE, ADMIN, MOD, SUP**)`)
+    if(!args[0] || !args[1]) return channel.send(`${emojis.errado} ¦ ${author}, você precisa mencionar quem você deseja adicionar na lista de Staff. (Cargos: **CEO, ORC, GERENTE, ADMIN, MOD, SUP**)`)
     
     const user = 
     this.client.users.cache.get(args[0]) ||
@@ -88,8 +88,19 @@ module.exports = class prefix extends Command {
       guilduser.roles.add(rol)
       await clientdb.findOneAndUpdate({_id: cid}, {$push:{'staff.suporte': user.tag}})
   }
+} else if(role == "orc") {
+  const rol = await message.guild.roles.cache.find((x) => x.name == "Responsável Orçamentos")
+  if(doc.staff.orc.find((x) => x == user.tag)) {
+    channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.tag}** não está mais setado como **Responsável de Orçamentos**`)
+    guilduser.roles.remove(rol)
+    await clientdb.findOneAndUpdate({_id: this.client.user.id}, {$pull:{'staff.orc': user.tag}})
 } else {
-  return channel.send(`${emojis.errado} ¦ ${author}, você precisa inserir um cargo válido. Lista de cargos: **CEO, GERENTE, ADMIN, MOD, SUP**`)
+    channel.send(`${emojis.ok} ¦ ${author}, o usuário **${user.tag}** foi setado como meu **Responsável de Orçamentos**`)
+    guilduser.roles.add(rol)
+    await clientdb.findOneAndUpdate({_id: cid}, {$push:{'staff.orc': user.tag}})
+} 
+} else {
+  return channel.send(`${emojis.errado} ¦ ${author}, você precisa inserir um cargo válido. Lista de cargos: **CEO, ORC, GERENTE, ADMIN, MOD, SUP**`)
 }
   }
 }

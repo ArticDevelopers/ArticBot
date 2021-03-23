@@ -15,6 +15,7 @@ module.exports = class {
         this.client.database.pedido = Pedido;
         this.client.database.user = User;
         
+        const db = await this.client.database.client.findOne({_id: this.client.user.id})
         console.log(`Estou pronto. Users: ${this.client.users.cache.size}, comandos: ${this.client.commands.all.size}`)
 
         const status = [
@@ -34,6 +35,10 @@ module.exports = class {
         setInterval(() => {
             var randomStatus = status[Math.floor(Math.random() * status.length)];
             this.client.user.setActivity(randomStatus.name)
+            this.client.channels.cache.get('823659797936996432').edit({name: `Pedidos: ${db.lastpedido}`})
+            this.client.channels.cache.get('823661361762533426').edit({name: `Pedidos fechados: ${db.pedidosfechados}`})
+            this.client.channels.cache.get('823660377681821767').edit({name: `Orçamentos: ${db.lastorc}`})
+            this.client.channels.cache.get('823661264634511380').edit({name: `Orçamentos fechados: ${db.orcsfechados}`})
         }, 10 * 1000);
         this.client.user.setStatus("online");
     }

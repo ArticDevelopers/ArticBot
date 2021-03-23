@@ -55,6 +55,7 @@ module.exports = class add extends Command {
             await author.send(`> Qual a complexidade do Bot de 0 - 10? (0 não muito complexo e 10 muito complexo) **Você tem 15 segundos para responder**`)
             var ccollector = author.dmChannel.createMessageCollector((x) => x.author.id == author.id, {time: 15000})
             ccollector.on('collect', async (c) => {
+              if(isNaN(c.content)) return channel.send(`${emojis.errado} ¦ ${author}, você precisa inserir um número de 0-10`)
                 complexo = c.content
                 ccollector.stop()
                 await author.send(`> O que você quer no Bot? **Você tem 5 minutos para responder.**`)
@@ -95,14 +96,14 @@ module.exports = class add extends Command {
                         const logc = this.client.channels.cache.get('823329561537150988')
                         const orcc = this.client.channels.cache.get('822434129966268488')
                         
-                        await this.client.database.pedido.create({_id: `orc${pid}`, 'info.idu': author.id, 'info.nu': author.tag, 'info.date': Date.now(), 'info.orcamento': true})
+                        await this.client.database.pedido.create({_id: `orc${pid}`, 'info.idu': author.id, 'info.nu': author.tag, 'info.date': Date.now(), 'info.orcamento.ativo': true, 'id': pid})
 
                         const loge = new ClientEmbed(author)
                         .setTitle(`${emojis.order} Novo orçamento:`)
                         .addField(`Autor:`, author.tag)
                         .addField(`ID:`, pid)
                         .addField(`Data:`, moment(Date.now()).format('LLL'))
-                        .addField(`Status:`, `Em análise`)
+                        .setDescription(`**Status:**: \nEm análise`)
                         .setThumbnail(author.displayAvatarURL({dynamic: true}))
                         const logsend = logc.send(`<@&823338158241480716>`, loge).then(async(x) => await this.client.database.pedido.findOneAndUpdate({_id: `orc${pid}`}, {$set:{'info.messageid2': x.id}}))
 
@@ -122,8 +123,35 @@ module.exports = class add extends Command {
 
                        const orcsend = orcc.send(`Nova solicitação de orçamento: \n||<@&823338158241480716>||`, orce).then(async(x) => await this.client.database.pedido.findOneAndUpdate({_id: `orc${pid}`}, {$set:{'info.messageid': x.id}}))
 
-                       
-                        await clientdb.updateOne({$set:{lastorc: pid}})
+                       const guild = message.guild
+                       const category = guild.channels.cache.find((x) => x.id == "823655729738809344" && x.type == "category")
+                       guild.channels.create(`orçamento ${pid}`, {
+                        parent: category.id,
+                         permissionOverwrites: [
+                          {
+                            id: author.id,
+                            allow: [
+                            "VIEW_CHANNEL",
+                             "READ_MESSAGE_HISTORY",
+                             "SEND_MESSAGES"
+                            ]
+                          },
+                          {
+                            id: "822427773112942592",
+                            allow: [
+                              "VIEW_CHANNEL",
+                              "SEND_MESSAGES",
+                              "READ_MESSAGE_HISTORY"
+                            ]
+                          },
+                           {
+                             id: guild.id,
+                             deny: "VIEW_CHANNEL"
+                           },
+                         ],
+                        
+                       }).then(async(x) => await this.client.database.pedido.findOneAndUpdate({_id: `orc${pid}`}, {$set:{channelid: x.id}}))
+                        await this.client.database.client.findOneAndUpdate({_id: this.client.user.id}, {$set:{lastorc: pid}})
                         await this.client.database.user.findOneAndUpdate({_id: author.id}, {$push:{'pedidos.ids': `orc${pid}`}}, {$set:{'pedidos.aberto': true}})
                         
                      })

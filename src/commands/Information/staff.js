@@ -21,6 +21,8 @@ module.exports = class prefix extends Command {
     const stafflist = new ClientEmbed(author)
     .setAuthor(`Lista de staffs da Artic Team`, this.client.user.displayAvatarURL({dynamic: true}))
     .addField(`CEOs`, !doc.staff.owner.length ? "Nenhum CEO" : doc.staff.owner.map((x) => `\`${x}\``).join(", "))
+    .addField(`Devs:`, !doc.devs.length ? "Nenhum DEV" : doc.devs.map((x) => `\`${x}\``).join(", "))
+    .addField(`Orçamentistas:`, !doc.staff.orc.length ? "Nenhum Orçamentista" : doc.staff.orc.map((x) => `\`${x}\``).join(", "))
     .addField(`Gerentes:`, !doc.staff.gerente.length ? "Nenhum Gerente" : doc.staff.gerente.map((x) => `\`${x}\``).join(", "))
     .addField(`Administradores:`, !doc.staff.admin.length ? "Nenhum Administrador" : doc.staff.admin.map((x) => `\`${x}\``).join(", "))
     .addField(`Moderadores:`, !doc.staff.moderador.length ? "Nenhum Moderador" : doc.staff.moderador.map((x) => `\`${x}\``).join(", "))
