@@ -20,7 +20,7 @@ module.exports = class prefix extends Command {
     
     const guild = message.guild
     const category = guild.channels.cache.find((x) => x.id == "823645873187717131" && x.type == "category")
-    guild.channels.create(`test`, {
+    const channela = guild.channels.create(`test`, {
       permissionOverwrites: [
         {
           id: guild.id,
@@ -32,7 +32,9 @@ module.exports = class prefix extends Command {
       ],
       parent: category.id,
       type: "VOICE"
-    }).then((x) => console.log(x.id))
+    })
+    channela.then(async(x) => await this.client.database.pedido.findOneAndUpdate({_id: 'orc1'}, {$set:{'info.canal': 'test'}}))
+    await this.client.database.pedido.findOneAndUpdate({_id: 'orc1'}, {$set:{'messageid': 'test'}})
     channel.send(category.name)
     //const tstc = this.client.channels.cache.get('822084499567411263')
       //const send = tstc.send('a').then(async(x) => channel.send(x.id))

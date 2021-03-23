@@ -20,7 +20,6 @@ let clientSchema = new Schema({
         suporte: {type: Array, default: []},
     },
     
-    
 });
 
 const Client = mongoose.model("Client", clientSchema);

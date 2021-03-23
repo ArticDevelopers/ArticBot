@@ -7,4 +7,11 @@ module.exports = {
     ok: '<:okmark:822592726259335218>',
     order: '<:order:823346978058403860>',
     new: '<:new:823346975523995649>',
+    // help //
+    cancel: '<:cancel:823987887258992733>',
+    return: '<:return:823987887880011806>',
+    helporder: '<:orderh:823987889054023710>',
+    info: '<:informationbutton:823987888475340802>',
+    config: '<:settings:823987888709566477>',
+    bot: '<:bot:823987887237627944>',
 }
