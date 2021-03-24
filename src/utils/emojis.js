@@ -14,4 +14,5 @@ module.exports = {
     info: '<:informationbutton:823987888475340802>',
     config: '<:settings:823987888709566477>',
     bot: '<:bot:823987887237627944>',
+    staff: '<:staff:824006107973419078>',
 }
